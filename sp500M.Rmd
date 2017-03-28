@@ -1,0 +1,72 @@
+---
+title: "SP500"
+author: "Johnson Ekedum"
+date: "March 27, 2017"
+output: html_document
+---
+
+
+```{r setup, include=FALSE}
+library(tseries)
+```
+1.  TODO: Download the data of SP500 '^gspc'.
+```{r }
+SNPdata <- get.hist.quote('^gspc',quote="Close")
+
+```
+
+2. TODO: Calculate the log returns, which is the subtractration of log(lag(SNPdata)) and 
+```{r}
+
+SNPret <- lag(SNPdata) - log(SNPdata)
+
+```
+3. TODO: Calculate volatility measure that is to multiply sd(SNPret),sqrt(250), 100
+```{r}
+SNPvol <- sd(SNPret) * sqrt(250) * 100
+```
+
+*  Define getVol function for volatility
+```{r}
+getVol <- function(d, logrets) {
+	var = 0
+	lam = 0
+	varlist <- c()
+
+	for (r in logrets) {
+		lam = lam*(1 - 1/d) + 1
+	  var = (1 - 1/lam)*var + (1/lam)*r^2
+		varlist <- c(varlist, var)
+	}
+
+	sqrt(varlist)
+}
+```
+
+* Calculate volatility over entire length of series for various three different decay factors: 10 30. 100
+
+4.  TODO: call getVol function with the parameters: 10,SNPret
+
+```{r}
+volest <- getVol(10,SNPret)
+
+```
+5.  TODO: call getVol function with the parameters: 30,SNPret
+```{r}
+
+volest2 <- getVol(30,SNPret)
+```
+6.  TODO: call getVol function with the parameters: 100,SNPret
+```{r}
+volest3 <- getVol(100,SNPret)
+```
+7.  Plot the results, overlaying the volatility curves on the data, just as was done in the S&P example.
+8. TODO: Add connected line segments for volest2 with the parameters: type="l",col="red"
+9. TODO: Add connected line segments for volest3 with the parameters: type="l",col="blue"
+
+```{r}
+plot(volest,type="l")
+lines(volest2, y = NULL, type = "l",col="red")
+lines(volest3, y = NULL, type = "l",col="blue")
+
+```
