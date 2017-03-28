@@ -6,6 +6,8 @@ output: html_document
 ---
 
 
+** [Github Directory path] (https://github.com/jdpersona/SP500.git)
+
 ```{r setup, include=FALSE}
 library(tseries)
 ```
